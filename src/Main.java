@@ -1,6 +1,7 @@
 import builders.StudentsBuilder;
 import entities.Studant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,7 +12,8 @@ public class Main {
     public static void main(String[] args) {
         var allStudents = StudentsBuilder.getAllStudents();
         scanner = new Scanner(System.in);
-        sortedStudentListByAverage = sortByAverageResult(allStudents);
+        sortedStudentListByAverage = new ArrayList<>(allStudents);
+        Collections.sort(sortedStudentListByAverage, (p2, p1) -> Double.compare(getAverageStudent(p1), getAverageStudent(p2)));
         boolean exec = true;
         while (exec) {
             System.out.println("#########################################");
@@ -62,22 +64,6 @@ public class Main {
     private static float getAverageStudent(Studant studant) {
         return (studant.getTestOne() + studant.getTestTwo() + studant.getTestThree()) / 3;
     }
-
-    private static List<Studant> sortByAverageResult(List<Studant> students) {
-        List<Studant> newList = new ArrayList<Studant>(students);
-        for (int i = 1; i < newList.size(); i++) {
-            double currentAverage = getAverageStudent(newList.get(i));
-            double previousAverage = getAverageStudent(newList.get(i - 1));
-            if (currentAverage > previousAverage) {
-                Studant currentStudent = newList.get(i);
-                newList.remove(i);
-                newList.add(i - 1, currentStudent);
-                i = Math.max(0, i - 2);
-            }
-        }
-        return newList;
-    }
-
 
     /**
      * 1. Recupere da lista os alunos que passaram de ano (nota minima 7.0).
